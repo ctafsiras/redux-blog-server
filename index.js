@@ -23,9 +23,9 @@ const run = async () => {
 
     app.get("/posts", async (req, res) => {
       const cursor = postCollection.find({});
-      const post = await cursor.toArray();
+      const posts = await cursor.toArray();
 
-      res.send({ status: true, data: post });
+      res.send({ status: true, data: posts });
     });
 
     app.post("/post", async (req, res) => {
@@ -33,6 +33,14 @@ const run = async () => {
 
       const result = await postCollection.insertOne(post);
 
+      res.send(result);
+    });
+
+    app.patch("/post/:id", async (req, res) => {
+      const post = req.body;
+      const id = req.params.id;
+
+      const result = await postCollection.updateOne({ _id: ObjectId(id) }, { $set: post });
       res.send(result);
     });
 
